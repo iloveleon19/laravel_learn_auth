@@ -9,9 +9,12 @@ window._ = require('lodash');
 
 try {
     window.Popper = require('popper.js').default;
+    window.moment = require('moment');
+
     window.$ = window.jQuery = require('jquery');
 
     require('bootstrap');
+    require('tempusdominus-bootstrap-4');
 } catch (e) {}
 
 /**
