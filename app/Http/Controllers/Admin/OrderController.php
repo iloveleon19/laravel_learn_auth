@@ -20,14 +20,14 @@ class OrderController extends Controller
 
         $orders = Order::select('product_id')
             ->selectRaw('COUNT(*) AS order_count, SUM(price) AS order_price, SUM(amount) AS order_amount')
-            ->where('price','>','0')
+            ->where('price', '>', '0')
             ->whereIn('product_id', $results->toArray())
             ->groupBy(['product_id'])
             ->get()->keyBy('product_id');
         
         $stocks = Order::select('product_id')
             ->selectRaw('COUNT(*) AS stock_count, SUM(-`price`) AS stock_price, SUM(amount) AS stock_amount')
-            ->where('price','<','0')
+            ->where('price', '<', '0')
             ->whereIn('product_id', $results->toArray())
             ->groupBy(['product_id'])
             ->get()->keyBy('product_id');
@@ -40,7 +40,7 @@ class OrderController extends Controller
             collect($orders[$key])->each(function($item, $index) use($result) {
                 $result->$index=$item;
             });
-            $result->total_result = $orders[$key]->order_price - $orders[$key]->stock_price;
+            $result->total_result = $result->order_price - $result->stock_price;
         }
 
         return view('admin.order.index',compact('results'));
